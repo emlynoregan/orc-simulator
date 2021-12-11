@@ -1,6 +1,8 @@
 import setcreds
 import openai
 
+diagnostics = 0
+
 # this is the basic content of the game
 data = {
     "orc": {
@@ -62,10 +64,6 @@ the orc says: "You want amulet?"
             }
         },
         "hungry": True
-    },
-    "dead orc": {
-        "description": "There is a dead orc lying on the ground.",
-        "items": {}
     },
     "human": {
         "alive": True,
@@ -146,6 +144,12 @@ def get_orc_says():
 
     temperature = 1
 
+    if diagnostics:
+        print("*** orc prompt ***")
+        orc_prompt_to_print = "\n".join([f"*** {line}" for line in orc_prompt.split("\n")])
+        print(orc_prompt_to_print)
+        print("*****************")
+
     completion = openai.Completion.create(
         engine="davinci", 
         max_tokens=32, 
@@ -159,6 +163,11 @@ def get_orc_says():
     ai_msg_lines = ai_raw_msg.split("\n")
 
     ai_msg = ai_msg_lines[0]
+
+    if diagnostics:
+        print("*** orc response ***")
+        print(ai_msg)
+        print("*****************")
 
     return ai_msg
 
